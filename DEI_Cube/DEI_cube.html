@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Marques Cube</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        #title {
+            position: absolute;
+            top: 10vh;
+            width: 100vw;
+            z-index: 1;
+            text-align: center;
+            font-family: Arial, sans-serif;
+            font-size: 6vmin;
+            color: rgb(230, 8, 200);
+        }
+
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="title">
+        Team Sgrai
+    </div>
+    <script async src="https://unpkg.com/es-module-shims@1.3.6/dist/es-module-shims.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "../three.js-master/build/three.module.js"
+            }
+        }
+    </script>
+    <script type="module">
+        import * as THREE from "three";
+
+        let scene, camera, renderer;
+        let cube;
+        let cube1;
+        let cube2;
+
+        function windowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function initialize() {
+            // Create a scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0066ff);
+
+            // Create a perspective camera
+            camera = new THREE.PerspectiveCamera(50.0, window.innerWidth / window.innerHeight, 1.0, 10.0);
+
+            // Create a renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            // Create a box geometry
+            const geometry = new THREE.BoxGeometry();
+
+            // Create a texture
+            const texture = new THREE.TextureLoader().load("./textures/marques.png");
+            const texture1 = new THREE.TextureLoader().load("./textures/didi.png");
+            const texture2 = new THREE.TextureLoader().load("./textures/mimi.png");
+
+            // Create a white-colored material with the specified texture
+            const material = new THREE.MeshBasicMaterial({ color: 0xffffff, map: texture });
+            const material1 = new THREE.MeshBasicMaterial({ color: 0xffffff, map: texture1 });
+            const material2 = new THREE.MeshBasicMaterial({ color: 0xffffff, map: texture2 });
+
+            // Create a mesh with the specified geometry and material
+            cube = new THREE.Mesh(geometry, material);
+            cube1 = new THREE.Mesh(geometry, material1);
+            cube2 = new THREE.Mesh(geometry, material2);
+
+            // Add it to the scene
+            scene.add(cube);
+            scene.add(cube1);
+            scene.add(cube2);
+
+            // Set the camera position;
+            camera.position.z = 4.0;
+
+            // Register the event handler to be called on window resize
+            window.addEventListener("resize", windowResize);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Animate the cube
+            cube.rotation.x += 0.02;
+            cube.rotation.y += 0.02;
+            cube1.rotation.x += 0.02;
+            cube1.rotation.y += 0.02;
+            cube2.rotation.x += 0.02;
+            cube2.rotation.y += 0.02;
+
+            cube.position.x = 2;
+            cube1.position.x = -2;
+
+            // Render the scene
+            renderer.render(scene, camera);
+        }
+
+        initialize();
+        animate();
+    </script>
+</body>
+
+</html>
